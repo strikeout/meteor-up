@@ -3,7 +3,7 @@
 # Remove the lock
 set +e
 sudo rm /var/lib/dpkg/lock > /dev/null
-sudo rm /var/cache/apt/archives/lock > /dev/null
+[ -f /var/cache/apt/archives/lock ] && sudo rm /var/cache/apt/archives/lock > /dev/null
 sudo dpkg --configure -a
 set -e
 
@@ -24,11 +24,9 @@ echo 'deb https://oss-binaries.phusionpassenger.com/apt/passenger trusty main' |
 sudo chown root: /etc/apt/sources.list.d/passenger.list
 sudo chmod 600 /etc/apt/sources.list.d/passenger.list
 
-sudo apt-get update
+sudo apt-get update -y > /dev/null
 sudo apt-get install -y nginx-extras passenger
 
-
-
-# Restart nginx
-sudo stop nginx || :
-sudo start nginx
+# dirty hack, else copy template fails for some acl reason
+sudo chmod 777 /etc/nginx/sites-enabled/
+[ -f /etc/nginx/sites-enabled/default ] && sudo rm /etc/nginx/sites-enabled/default
