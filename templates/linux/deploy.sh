@@ -101,7 +101,7 @@ sudo mv tmp/bundle app
 #wait and check
 echo "Waiting for MongoDB to initialize. (5 minutes)"
 . /opt/<%= appName %>/config/env.sh
-#wait-for-mongo ${MONGO_URL} 300000
+wait-for-mongo ${MONGO_URL} 300000
 
 # restart app
 sudo stop <%= appName %> || :

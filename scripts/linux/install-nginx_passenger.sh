@@ -7,8 +7,11 @@ sudo rm /var/lib/dpkg/lock > /dev/null
 sudo dpkg --configure -a
 set -e
 
-sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 561F9B9CAC40B2F7
-sudo apt-get -y install apt-transport-https ca-certificates
+
+if ! apt-key list | grep Phusion > /dev/null; then
+    sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 561F9B9CAC40B2F7
+fi
+
 
 # Ubuntu 14.04
 # deb https://oss-binaries.phusionpassenger.com/apt/passenger trusty main
@@ -24,8 +27,9 @@ echo 'deb https://oss-binaries.phusionpassenger.com/apt/passenger trusty main' |
 sudo chown root: /etc/apt/sources.list.d/passenger.list
 sudo chmod 600 /etc/apt/sources.list.d/passenger.list
 
+sudo apt-get -y install apt-transport-https ca-certificates > /dev/null
 sudo apt-get update -y > /dev/null
-sudo apt-get install -y nginx-extras passenger
+sudo apt-get install -y nginx-extras passenger > /dev/null
 
 # dirty hack, else copy template fails for some acl reason
 sudo chmod 777 /etc/nginx/sites-enabled/
